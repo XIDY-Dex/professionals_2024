@@ -1,6 +1,8 @@
 package com.student.professionals2024.ui.screens.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -10,12 +12,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.student.professionals2024.R
 import com.student.professionals2024.domain.viewmodels.HomeViewModel
 import com.student.professionals2024.domain.viewmodels.SendPackageViewModel
@@ -64,11 +69,20 @@ fun MainHomeScreen(homeViewModel: HomeViewModel, sendPackageViewModel: SendPacka
     ) {paddings ->
         NavHost(navController = nestedNavController, startDestination = "home") {
             composable("home") {
-                HomeMenuItem(
-                    mainText = "Send a package",
-                    secondaryText = "Request for a driver to pick up or deliver your package for you",
-                    icon = R.drawable.package_icon
-                ) { nestedNavController.navigate("package")}
+                Row(modifier = Modifier.fillMaxSize()) {
+                    HomeMenuItem(
+                        mainText = "Send a package",
+                        secondaryText = "Request for a driver to pick up or deliver your package for you",
+                        icon = R.drawable.package_icon
+                    ) { nestedNavController.navigate("package")}
+                    HomeMenuItem(
+                        mainText = "Chats",
+                        secondaryText = "Search for availible rider in your area",
+                        icon = R.drawable.ic_chat
+                    ) {
+                        nestedNavController.navigate("chatsList")
+                    }
+                }
             }
             composable("wallet") {
                 Text(text = "Wallet")
@@ -99,6 +113,12 @@ fun MainHomeScreen(homeViewModel: HomeViewModel, sendPackageViewModel: SendPacka
                 composable("transaction") {
                     TransactionScreen(sendPackageViewModel, nestedNavController)
                 }
+            }
+            composable("chatsList") {
+                ChatListScreen()
+            }
+            composable("chat/{chatId}", arguments = listOf(navArgument("chatId") { type = NavType.IntType})) {
+
             }
         }
     }

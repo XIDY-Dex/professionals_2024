@@ -10,6 +10,9 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.realtime.realtime
 import io.github.jan.supabase.serializer.JacksonSerializer
 import javax.inject.Singleton
 
@@ -25,6 +28,7 @@ class SupabaseModule {
         ) {
             install(Auth)
             install(Postgrest)
+            install(Realtime)
             defaultSerializer = JacksonSerializer()
         }
     }
@@ -35,4 +39,15 @@ class SupabaseModule {
         return client.auth
     }
 
+    @Provides
+    @Singleton
+    fun providePostgrest(client: SupabaseClient): Postgrest {
+        return client.postgrest
+    }
+
+    @Provides
+    @Singleton
+    fun provideRealtime(client: SupabaseClient): Realtime {
+        return client.realtime
+    }
 }
